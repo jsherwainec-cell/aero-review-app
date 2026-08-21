@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AELE Reviewer PWA</title>
+  <title>AELE Review Master PWA</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#2563eb" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,7 +11,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased flex flex-col">
 
-  <!-- Navigation Bar -->
+  <!-- Header -->
   <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
     <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3 cursor-pointer" onclick="showView('dashboard')">
@@ -27,10 +27,10 @@
     </div>
   </header>
 
-  <!-- Main Container -->
+  <!-- Main Content -->
   <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6">
 
-    <!-- VIEW: DASHBOARD -->
+    <!-- DASHBOARD VIEW -->
     <div id="view-dashboard" class="space-y-6">
       
       <!-- Stats Overview -->
@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <!-- Quick Full Mock Button -->
+      <!-- Quick Mock Board Button -->
       <button onclick="startSession('ALL', 50)" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold p-4 rounded-2xl shadow-lg shadow-blue-600/20 flex items-center justify-between transition">
         <div class="flex items-center gap-3">
           <i data-lucide="zap" class="w-6 h-6 text-yellow-300"></i>
@@ -66,7 +66,7 @@
         <i data-lucide="arrow-right" class="w-5 h-5"></i>
       </button>
 
-      <!-- Subject Practice Selection -->
+      <!-- Subject Selection -->
       <div>
         <h2 class="text-sm font-bold uppercase text-slate-400 mb-3 tracking-wider">Practice by Subject</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -74,7 +74,7 @@
           <button onclick="startSession('Aerodynamics', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
             <div>
               <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">01. Aerodynamics</div>
-              <div class="text-xs text-slate-400">50 Questions • Performance, High-Speed</div>
+              <div class="text-xs text-slate-400">Random 50 • Performance, High-Speed</div>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
           </button>
@@ -82,7 +82,7 @@
           <button onclick="startSession('Mathematics', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
             <div>
               <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">02. Mathematics</div>
-              <div class="text-xs text-slate-400">50 Questions • Algebra, Calculus, Vectors</div>
+              <div class="text-xs text-slate-400">Random 50 • Algebra, Calculus, Vectors</div>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
           </button>
@@ -90,7 +90,7 @@
           <button onclick="startSession('Aircraft Structures and Design', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
             <div>
               <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">03. Structures & Design</div>
-              <div class="text-xs text-slate-400">50 Questions • Load Factors, Beams, FAR 23</div>
+              <div class="text-xs text-slate-400">Random 50 • Load Factors, Beams, FAR 23</div>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
           </button>
@@ -98,7 +98,7 @@
           <button onclick="startSession('Aircraft Construction, Repair and Modification', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
             <div>
               <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">04. ACRM</div>
-              <div class="text-xs text-slate-400">50 Questions • Fasteners, NDT, Weight & Balance</div>
+              <div class="text-xs text-slate-400">Random 50 • Fasteners, NDT, Weight & Balance</div>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
           </button>
@@ -106,7 +106,7 @@
           <button onclick="startSession('Aircraft Powerplant and Thermodynamics', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
             <div>
               <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">05. Powerplant & Thermo</div>
-              <div class="text-xs text-slate-400">50 Questions • Otto/Brayton, Turbines, Propellers</div>
+              <div class="text-xs text-slate-400">Random 50 • Otto/Brayton, Turbines, Propellers</div>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
           </button>
@@ -114,7 +114,7 @@
           <button onclick="startSession('Engineering Economics, Laws and Ethics', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
             <div>
               <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">06. Laws, Economics & Ethics</div>
-              <div class="text-xs text-slate-400">50 Questions • PD 1570, RA 9497, Annuity</div>
+              <div class="text-xs text-slate-400">Random 50 • PD 1570, RA 9497, Annuity</div>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
           </button>
@@ -132,7 +132,7 @@
 
     </div>
 
-    <!-- VIEW: QUIZ ACTIVE -->
+    <!-- QUIZ VIEW -->
     <div id="view-quiz" class="hidden space-y-5">
       
       <!-- Top Status Header -->
@@ -180,7 +180,7 @@
 
     </div>
 
-    <!-- VIEW: RESULTS -->
+    <!-- RESULTS VIEW -->
     <div id="view-results" class="hidden space-y-6 text-center py-6">
       
       <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-md mx-auto space-y-5">
@@ -210,6 +210,7 @@
 
   </main>
 
+  <script src="./questions.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>

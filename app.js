@@ -3,35 +3,27 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(console.error);
 }
 
-let allQuestions = [];
+let allQuestions = window.ALL_AELE_QUESTIONS || [];
 let activeQuizQuestions = [];
 let currentQuestionIndex = 0;
-let userAnswers = {}; // { questionId: selectedOptionLetter }
+let userAnswers = {};
 let quizTimerInterval = null;
 let secondsElapsed = 0;
 let instantFeedbackMode = true;
 
-// DOM Elements
 const views = {
   dashboard: document.getElementById('view-dashboard'),
-  setup: document.getElementById('view-setup'),
   quiz: document.getElementById('view-quiz'),
   results: document.getElementById('view-results')
 };
 
-// Initialize App
-async function init() {
-  try {
-    const res = await fetch('./questions.json');
-    allQuestions = await res.json();
-    updateStatsDashboard();
-    lucide.createIcons();
-  } catch (err) {
-    console.error("Could not load question bank:", err);
-  }
+function init() {
+  allQuestions = window.ALL_AELE_QUESTIONS || [];
+  updateStatsDashboard();
+  if (window.lucide) lucide.createIcons();
 }
 
-// Fisher-Yates Random Shuffle
+// Fisher-Yates Shuffle for true non-repeating randomness
 function shuffleArray(array) {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -42,30 +34,37 @@ function shuffleArray(array) {
 }
 
 function showView(viewName) {
-  Object.keys(views).forEach(v => views[v].classList.add('hidden'));
-  views[viewName].classList.remove('hidden');
+  Object.keys(views).forEach(v => {
+    if (views[v]) views[v].classList.add('hidden');
+  });
+  if (views[viewName]) views[viewName].classList.remove('hidden');
   window.scrollTo(0, 0);
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
 }
 
-// Start a 50-Question Randomized Session
+// Dynamic 50-Question Sub-Sampler
 function startSession(subjectFilter = 'ALL', count = 50, weakOnly = false) {
   let pool = allQuestions;
 
   if (subjectFilter !== 'ALL') {
-    pool = pool.filter(q => q.subject === subjectFilter);
+    pool = pool.filter(q => q.subject.toLowerCase() === subjectFilter.toLowerCase());
   }
 
   if (weakOnly) {
     const wrongIds = getWrongQuestionsList();
     pool = pool.filter(q => wrongIds.includes(q.id));
     if (pool.length === 0) {
-      alert("No recorded weak questions for this subject yet! Practice a standard session first.");
+      alert("No recorded weak questions yet! Complete a standard session first.");
       return;
     }
   }
 
-  // Randomize pool and slice to requested count (default 50)
+  if (pool.length === 0) {
+    alert("No questions available for this subject.");
+    return;
+  }
+
+  // Randomize full pool and pull 50 questions
   const randomized = shuffleArray(pool);
   activeQuizQuestions = randomized.slice(0, Math.min(count, randomized.length));
 
@@ -88,7 +87,7 @@ function startTimer() {
     secondsElapsed++;
     const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
     const secs = String(secondsElapsed % 60).padStart(2, '0');
-    timerEl.innerText = `${mins}:${secs}`;
+    if (timerEl) timerEl.innerText = `${mins}:${secs}`;
   }, 1000);
 }
 
@@ -121,12 +120,10 @@ function renderQuestion() {
     }
 
     btn.innerHTML = `<span class="px-2.5 py-1 rounded-lg bg-slate-700 text-xs font-bold">${letter}</span> <span class="flex-1 text-sm md:text-base">${opt.substring(2).trim()}</span>`;
-    
     btn.onclick = () => selectOption(q.id, letter);
     optionsContainer.appendChild(btn);
   });
 
-  // Explanation Box
   const expBox = document.getElementById('explanation-box');
   if (selectedAnswer && instantFeedbackMode) {
     expBox.classList.remove('hidden');
@@ -140,13 +137,12 @@ function renderQuestion() {
     expBox.classList.add('hidden');
   }
 
-  // Update Nav Buttons
   document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
   document.getElementById('next-btn').innerText = currentQuestionIndex === activeQuizQuestions.length - 1 ? 'Finish Exam' : 'Next Question';
 }
 
 function selectOption(qId, letter) {
-  if (userAnswers[qId]) return; // prevent multiple clicks
+  if (userAnswers[qId]) return;
   userAnswers[qId] = letter;
   renderQuestion();
 }
@@ -167,7 +163,6 @@ function prevQuestion() {
   }
 }
 
-// Calculate & Save Stats
 function finishQuiz() {
   clearInterval(quizTimerInterval);
   let correctCount = 0;
@@ -183,7 +178,6 @@ function finishQuiz() {
 
   const scorePercent = Math.round((correctCount / activeQuizQuestions.length) * 100);
 
-  // Save session to LocalStorage
   const sessionData = {
     date: new Date().toISOString(),
     subject: document.getElementById('quiz-subject-title').innerText,
@@ -196,7 +190,6 @@ function finishQuiz() {
 
   saveSessionLog(sessionData);
 
-  // Display Results
   document.getElementById('res-score-badge').innerText = `${scorePercent}%`;
   document.getElementById('res-score-detail').innerText = `${correctCount} / ${activeQuizQuestions.length} Correct`;
   document.getElementById('res-time').innerText = document.getElementById('quiz-timer').innerText;
@@ -208,7 +201,7 @@ function finishQuiz() {
 function saveSessionLog(session) {
   const history = JSON.parse(localStorage.getItem('aele_history') || '[]');
   history.unshift(session);
-  localStorage.setItem('aele_history', JSON.stringify(history.slice(0, 50))); // keep last 50
+  localStorage.setItem('aele_history', JSON.stringify(history.slice(0, 50)));
 }
 
 function getWrongQuestionsList() {
@@ -220,19 +213,21 @@ function getWrongQuestionsList() {
 
 function updateStatsDashboard() {
   const history = JSON.parse(localStorage.getItem('aele_history') || '[]');
-  document.getElementById('stat-total-sessions').innerText = history.length;
+  const totalEl = document.getElementById('stat-total-sessions');
+  const avgEl = document.getElementById('stat-avg-score');
+
+  if (totalEl) totalEl.innerText = history.length;
   
   if (history.length === 0) {
-    document.getElementById('stat-avg-score').innerText = '0%';
+    if (avgEl) avgEl.innerText = '0%';
     return;
   }
 
   const avg = Math.round(history.reduce((acc, cur) => acc + cur.percent, 0) / history.length);
-  document.getElementById('stat-avg-score').innerText = `${avg}%`;
+  if (avgEl) avgEl.innerText = `${avg}%`;
 
-  // History List
   const histContainer = document.getElementById('recent-history-list');
-  if (histContainer) {
+  if (histContainer && history.length > 0) {
     histContainer.innerHTML = history.slice(0, 5).map(h => `
       <div class="flex items-center justify-between p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
         <div>
@@ -247,4 +242,4 @@ function updateStatsDashboard() {
   }
 }
 
-window.onload = init;
+window.addEventListener('DOMContentLoaded', init);
