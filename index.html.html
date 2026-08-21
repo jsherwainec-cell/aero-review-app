@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AeroReview - Licensure Exam PWA</title>
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans pb-20 select-none">
+
+  <!-- Navigation Header -->
+  <header class="bg-slate-800/90 backdrop-blur sticky top-0 z-40 border-b border-slate-700 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <i data-lucide="plane" class="text-blue-400 w-6 h-6"></i>
+      <h1 class="font-bold text-lg tracking-wide text-white">AeroReview</h1>
+    </div>
+    <div class="flex items-center space-x-3 text-xs">
+      <span id="streak-badge" class="bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-full flex items-center gap-1 font-medium">
+        <i data-lucide="flame" class="w-3.5 h-3.5"></i> <span id="streak-count">0</span> Day Streak
+      </span>
+      <button id="install-btn" class="hidden bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-semibold">
+        Install
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-2xl w-full mx-auto p-4">
+
+    <!-- VIEW 1: HOME / DASHBOARD -->
+    <section id="view-dashboard" class="space-y-5">
+      <!-- Accuracy Card -->
+      <div class="bg-gradient-to-br from-blue-900/60 to-slate-800 p-5 rounded-2xl border border-blue-500/30 shadow-lg">
+        <div class="flex justify-between items-center mb-3">
+          <span class="text-sm text-slate-300 font-medium">Overall Mastery</span>
+          <span id="overall-pct" class="text-2xl font-black text-blue-400">0%</span>
+        </div>
+        <div class="w-full bg-slate-700 h-3 rounded-full overflow-hidden">
+          <div id="overall-progress" class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-4 text-center text-xs">
+          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
+            <div id="stat-total-answered" class="font-bold text-sm text-white">0</div>
+            <div class="text-slate-400 mt-0.5">Attempted</div>
+          </div>
+          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
+            <div id="stat-correct-count" class="font-bold text-sm text-emerald-400">0</div>
+            <div class="text-slate-400 mt-0.5">Correct</div>
+          </div>
+          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
+            <div id="stat-wrong-count" class="font-bold text-sm text-rose-400">0</div>
+            <div class="text-slate-400 mt-0.5">Focus List</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Modes -->
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="startQuickQuiz('all')" class="bg-blue-600 hover:bg-blue-500 text-left p-4 rounded-xl shadow font-semibold flex flex-col justify-between h-28 border border-blue-400/30">
+          <i data-lucide="play-circle" class="w-6 h-6 text-blue-200"></i>
+          <div>
+            <div class="text-sm font-bold">Comprehensive Mock</div>
+            <div class="text-xs text-blue-200 font-normal">All Subjects Exam</div>
+          </div>
+        </button>
+        <button onclick="startWeakDrill()" class="bg-rose-900/40 hover:bg-rose-900/60 border border-rose-500/40 text-left p-4 rounded-xl shadow flex flex-col justify-between h-28">
+          <i data-lucide="alert-triangle" class="w-6 h-6 text-rose-400"></i>
+          <div>
+            <div class="text-sm font-bold text-rose-200">Focus Drill</div>
+            <div class="text-xs text-rose-300 font-normal">Retry Missed Questions</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Subject Performance Breakdown -->
+      <div>
+        <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Subject Accuracy</h2>
+        <div id="subject-list" class="space-y-2"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: QUIZ INTERFACE -->
+    <section id="view-quiz" class="hidden space-y-4">
+      <div class="flex justify-between items-center text-xs text-slate-400">
+        <span id="quiz-subject-tag" class="bg-slate-800 px-2.5 py-1 rounded-md text-blue-300 font-medium">Aerodynamics</span>
+        <span id="quiz-progress-text" class="font-bold text-slate-200">Question 1 / 10</span>
+      </div>
+
+      <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-md">
+        <p id="question-text" class="text-base font-semibold text-white leading-relaxed mb-6"></p>
+        <div id="options-container" class="space-y-2.5"></div>
+
+        <!-- Explanation Accordion -->
+        <div id="explanation-box" class="hidden mt-5 p-4 rounded-xl bg-slate-900/90 border border-blue-500/30 text-xs leading-relaxed text-slate-300">
+          <div class="font-bold text-blue-400 mb-1 flex items-center gap-1">
+            <i data-lucide="info" class="w-4 h-4"></i> Explanation & Solution:
+          </div>
+          <p id="explanation-text"></p>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-2">
+        <button onclick="quitQuiz()" class="text-xs text-slate-400 hover:text-slate-200 px-3 py-2">Quit Test</button>
+        <button id="next-btn" onclick="nextQuestion()" class="hidden bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow">Next</button>
+      </div>
+    </section>
+
+    <!-- VIEW 3: SESSION RESULTS -->
+    <section id="view-results" class="hidden text-center py-6 space-y-5">
+      <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-lg max-w-sm mx-auto">
+        <div class="w-16 h-16 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="award" class="w-8 h-8"></i>
+        </div>
+        <h2 class="text-xl font-bold text-white mb-1">Session Complete!</h2>
+        <p id="session-summary-text" class="text-xs text-slate-400 mb-4"></p>
+        <div class="text-4xl font-extrabold text-blue-400 mb-2" id="session-score">80%</div>
+        <p class="text-xs text-slate-300" id="session-detail"></p>
+      </div>
+      <button onclick="switchView('dashboard')" class="bg-blue-600 text-white font-bold text-xs px-6 py-3 rounded-xl shadow">Back to Dashboard</button>
+    </section>
+
+  </main>
+
+  <!-- Bottom App Tab Bar -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-slate-800/95 backdrop-blur border-t border-slate-700 z-40">
+    <div class="max-w-2xl mx-auto flex justify-around py-2">
+      <button onclick="switchView('dashboard')" class="flex flex-col items-center text-blue-400 text-[10px] font-medium">
+        <i data-lucide="layout-dashboard" class="w-5 h-5 mb-0.5"></i> Dashboard
+      </button>
+      <button onclick="startQuickQuiz('all')" class="flex flex-col items-center text-slate-400 hover:text-slate-200 text-[10px] font-medium">
+        <i data-lucide="file-question" class="w-5 h-5 mb-0.5"></i> Mock Test
+      </button>
+      <button onclick="clearHistoryConfirm()" class="flex flex-col items-center text-slate-400 hover:text-rose-400 text-[10px] font-medium">
+        <i data-lucide="rotate-ccw" class="w-5 h-5 mb-0.5"></i> Reset Stats
+      </button>
+    </div>
+  </nav>
+
+  <script src="./app.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

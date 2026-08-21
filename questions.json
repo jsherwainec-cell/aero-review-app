@@ -1,0 +1,146 @@
+[
+  {
+    "id": "aero_001",
+    "subject": "Aerodynamics",
+    "topic": "Aircraft Performance & Drag",
+    "question": "At an airplane's minimum drag speed, the ratio between induced drag and profile drag (Di/Dp) is:",
+    "options": ["a. 1", "b. 1/3", "c. 1/2", "d. 3"],
+    "correct_answer": "a",
+    "explanation": "At minimum drag speed (L/D max), parasite/profile drag is equal to induced drag (Dp = Di). Therefore, the ratio Di / Dp = 1."
+  },
+  {
+    "id": "aero_002",
+    "subject": "Aerodynamics",
+    "topic": "Aircraft Classification",
+    "question": "Which of the following is a glider?",
+    "options": ["a. Zenith S-5", "b. Zeppelin", "c. F/A – 18", "d. DG 1001"],
+    "correct_answer": "d",
+    "explanation": "The DG Flugzeugbau DG-1001 is a modern two-seat sailplane/glider."
+  },
+  {
+    "id": "aero_003",
+    "subject": "Aerodynamics",
+    "topic": "Maneuvering Flight & Load Factors",
+    "question": "An aircraft with a gross weight of 2,000 pounds was subjected to a 60-degree constant altitude bank. What is the total load on the aircraft?",
+    "options": ["a. 1,500 lbs.", "b. 4,000 lbs.", "c. 1,862 lbs.", "d. 2,820 lbs."],
+    "correct_answer": "b",
+    "explanation": "In a coordinated level turn, load factor n = 1 / cos(60°) = 2.0 g. Total load = 2,000 lbs × 2.0 = 4,000 lbs."
+  },
+  {
+    "id": "aero_004",
+    "subject": "Aerodynamics",
+    "topic": "High Speed Aerodynamics",
+    "question": "Which of the following drag components is NOT present on a subsonic wing?",
+    "options": ["a. Induced Drag", "b. Wave Drag", "c. Parasite Drag", "d. Interference Drag"],
+    "correct_answer": "b",
+    "explanation": "Wave drag only occurs when flow velocity exceeds sonic speeds and forms shock waves. It is absent in subsonic flow."
+  },
+  {
+    "id": "aero_005",
+    "subject": "Aerodynamics",
+    "topic": "Wing Geometry & Aspect Ratio",
+    "question": "A higher induced angle of attack can be obtained by using:",
+    "options": ["a. lower taper ratio", "b. larger wing area", "c. higher wing aspect ratio", "d. lower wing aspect ratio"],
+    "correct_answer": "d",
+    "explanation": "Induced angle of attack is αi = CL / (π · AR · e). A lower aspect ratio (AR) increases induced angle of attack and induced drag."
+  },
+  {
+    "id": "math_001",
+    "subject": "Mathematics",
+    "topic": "Algebra & Quadratic Equations",
+    "question": "The discriminant of the standard quadratic equation Ax² + Bx + C = 0 is:",
+    "options": ["a. B² − 4AC", "b. B² + 4AC", "c. -B ± √(B² - 4AC)", "d. 4AC - B²"],
+    "correct_answer": "a",
+    "explanation": "In Ax² + Bx + C = 0, the discriminant D = B² − 4AC determines root characteristics."
+  },
+  {
+    "id": "math_002",
+    "subject": "Mathematics",
+    "topic": "Logarithms",
+    "question": "Solve for x in the logarithmic equation: log_x(1024) = 5/2",
+    "options": ["a. 8", "b. 4", "c. 16", "d. 32"],
+    "correct_answer": "c",
+    "explanation": "x^(5/2) = 1024 = 2^10. Taking the power of 2/5 on both sides: x = 2^4 = 16."
+  },
+  {
+    "id": "math_003",
+    "subject": "Mathematics",
+    "topic": "Differential Calculus",
+    "question": "Find the first derivative f'(x) for f(x) = 6x³ − 9x + 4:",
+    "options": ["a. 18x² + 9", "b. 18x - 9", "c. 6x² - 9", "d. 18x² − 9"],
+    "correct_answer": "d",
+    "explanation": "d/dx(6x³ - 9x + 4) = 18x² - 9."
+  },
+  {
+    "id": "struct_001",
+    "subject": "Aircraft Structures and Design",
+    "topic": "Aircraft Structural Components",
+    "question": "A wing structural design that utilizes the sealed internal wing cavity for fuel storage is known as a:",
+    "options": ["a. dry wing design", "b. fuel wing design", "c. wet wing design", "d. central fuel storage"],
+    "correct_answer": "c",
+    "explanation": "A wet wing (integral tank) seals the interior wing structure directly to hold fuel without fuel bladder bags."
+  },
+  {
+    "id": "struct_002",
+    "subject": "Aircraft Structures and Design",
+    "topic": "Structural Design Philosophy",
+    "question": "Structural designs that incorporate multiple load paths to prevent catastrophic failure in the event of a single member failure are termed:",
+    "options": ["a. fail safe design", "b. fail proof design", "c. safe life design", "d. reliable design"],
+    "correct_answer": "a",
+    "explanation": "Fail-safe structural design incorporates redundant load paths to sustain flight loads if a member fails."
+  },
+  {
+    "id": "acrm_001",
+    "subject": "Aircraft Construction, Repair and Modification",
+    "topic": "Heat Treatment of Metals",
+    "question": "Normalizing is an industrial heat-treating process used exclusively for:",
+    "options": ["a. non-ferrous metals aside from aluminum", "b. aluminum alloys only", "c. ferrous metals only", "d. both ferrous and non-ferrous metals"],
+    "correct_answer": "c",
+    "explanation": "Normalizing is performed exclusively on iron and steel (ferrous) alloys to refine grain structure and relieve internal stress."
+  },
+  {
+    "id": "acrm_002",
+    "subject": "Aircraft Construction, Repair and Modification",
+    "topic": "Aircraft Fasteners & Riveting",
+    "question": "According to standard aviation sheet metal repair standards, the driven shop head (bucktail) of a solid rivet must have a diameter of:",
+    "options": ["a. 1.5 times the shank diameter", "b. 0.5 times the shank diameter", "c. 2.0 times the sheet thickness", "d. 3.0 times the manufactured head"],
+    "correct_answer": "a",
+    "explanation": "Per AC 43.13-1B, a driven rivet bucktail diameter should be 1.5D and height should be 0.5D."
+  },
+  {
+    "id": "pwr_001",
+    "subject": "Aircraft Powerplant and Thermodynamics",
+    "topic": "Reciprocating Engine Principles",
+    "question": "How many complete revolutions of the crankshaft are required to complete all four strokes in a four-stroke engine?",
+    "options": ["a. 6", "b. 4", "c. 2", "d. 8"],
+    "correct_answer": "c",
+    "explanation": "Four strokes (4 × 180° = 720°) require exactly 2 full crankshaft revolutions."
+  },
+  {
+    "id": "pwr_002",
+    "subject": "Aircraft Powerplant and Thermodynamics",
+    "topic": "Gas Turbine Engine Systems",
+    "question": "The highest internal gas static pressure within a gas turbine engine occurs:",
+    "options": ["a. Between the compressor outlet and the combustion chamber", "b. In the center of the combustion chamber", "c. Across the high-pressure turbine nozzle", "d. In the propelling exhaust nozzle"],
+    "correct_answer": "a",
+    "explanation": "Static pressure reaches its peak at the compressor diffuser outlet before entering the combustion chamber."
+  },
+  {
+    "id": "law_001",
+    "subject": "Engineering Economics, Laws and Ethics",
+    "topic": "Philippine Aviation Law (P.D. 1570)",
+    "question": "Presidential Decree No. 1570, regulating the practice of Aeronautical Engineering in the Philippines, was signed on:",
+    "options": ["a. June 11, 1968", "b. June 11, 1973", "c. June 11, 1976", "d. June 11, 1978"],
+    "correct_answer": "d",
+    "explanation": "P.D. No. 1570 was enacted on June 11, 1978."
+  },
+  {
+    "id": "law_002",
+    "subject": "Engineering Economics, Laws and Ethics",
+    "topic": "Aviation Communications & Regulations",
+    "question": "What is the secondary surveillance radar (SSR) transponder code for two-way radio communication failure?",
+    "options": ["a. 2200", "b. 7500", "c. 7600", "d. 7700"],
+    "correct_answer": "c",
+    "explanation": "Squawk 7600 indicates loss of two-way radio communications (NORDO)."
+  }
+]
