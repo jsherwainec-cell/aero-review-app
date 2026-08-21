@@ -2,144 +2,214 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>AeroReview - Licensure Exam PWA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AELE Reviewer PWA</title>
   <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#2563eb" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans pb-20 select-none">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased flex flex-col">
 
-  <!-- Navigation Header -->
-  <header class="bg-slate-800/90 backdrop-blur sticky top-0 z-40 border-b border-slate-700 px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center space-x-2">
-      <i data-lucide="plane" class="text-blue-400 w-6 h-6"></i>
-      <h1 class="font-bold text-lg tracking-wide text-white">AeroReview</h1>
-    </div>
-    <div class="flex items-center space-x-3 text-xs">
-      <span id="streak-badge" class="bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-full flex items-center gap-1 font-medium">
-        <i data-lucide="flame" class="w-3.5 h-3.5"></i> <span id="streak-count">0</span> Day Streak
-      </span>
-      <button id="install-btn" class="hidden bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-semibold">
-        Install
+  <!-- Navigation Bar -->
+  <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="showView('dashboard')">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-lg">AE</div>
+        <div>
+          <h1 class="font-bold text-base md:text-lg leading-tight">AELE Master Review</h1>
+          <p class="text-xs text-slate-400">PRC Licensure Prep</p>
+        </div>
+      </div>
+      <button onclick="showView('dashboard')" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300">
+        <i data-lucide="home" class="w-5 h-5"></i>
       </button>
     </div>
   </header>
 
-  <!-- Main Content Container -->
-  <main class="flex-1 max-w-2xl w-full mx-auto p-4">
+  <!-- Main Container -->
+  <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6">
 
-    <!-- VIEW 1: HOME / DASHBOARD -->
-    <section id="view-dashboard" class="space-y-5">
-      <!-- Accuracy Card -->
-      <div class="bg-gradient-to-br from-blue-900/60 to-slate-800 p-5 rounded-2xl border border-blue-500/30 shadow-lg">
-        <div class="flex justify-between items-center mb-3">
-          <span class="text-sm text-slate-300 font-medium">Overall Mastery</span>
-          <span id="overall-pct" class="text-2xl font-black text-blue-400">0%</span>
+    <!-- VIEW: DASHBOARD -->
+    <div id="view-dashboard" class="space-y-6">
+      
+      <!-- Stats Overview -->
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+          <span class="text-xs text-slate-400 uppercase font-semibold">Total Sessions</span>
+          <div id="stat-total-sessions" class="text-2xl md:text-3xl font-extrabold text-blue-400 mt-1">0</div>
         </div>
-        <div class="w-full bg-slate-700 h-3 rounded-full overflow-hidden">
-          <div id="overall-progress" class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+          <span class="text-xs text-slate-400 uppercase font-semibold">Average Score</span>
+          <div id="stat-avg-score" class="text-2xl md:text-3xl font-extrabold text-emerald-400 mt-1">0%</div>
         </div>
-        <div class="grid grid-cols-3 gap-2 mt-4 text-center text-xs">
-          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
-            <div id="stat-total-answered" class="font-bold text-sm text-white">0</div>
-            <div class="text-slate-400 mt-0.5">Attempted</div>
+        <div class="col-span-2 md:col-span-1 bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex items-center justify-between">
+          <div>
+            <span class="text-xs text-slate-400 uppercase font-semibold">Target Mode</span>
+            <div class="text-base font-bold text-slate-200 mt-1">Random 50 / Test</div>
           </div>
-          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
-            <div id="stat-correct-count" class="font-bold text-sm text-emerald-400">0</div>
-            <div class="text-slate-400 mt-0.5">Correct</div>
-          </div>
-          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">
-            <div id="stat-wrong-count" class="font-bold text-sm text-rose-400">0</div>
-            <div class="text-slate-400 mt-0.5">Focus List</div>
-          </div>
+          <button onclick="startSession('ALL', 50, true)" class="px-3 py-2 bg-amber-600/30 border border-amber-500/50 text-amber-300 text-xs font-bold rounded-xl hover:bg-amber-600/50 transition">
+            Weak Spots
+          </button>
         </div>
       </div>
 
-      <!-- Quick Action Modes -->
-      <div class="grid grid-cols-2 gap-3">
-        <button onclick="startQuickQuiz('all')" class="bg-blue-600 hover:bg-blue-500 text-left p-4 rounded-xl shadow font-semibold flex flex-col justify-between h-28 border border-blue-400/30">
-          <i data-lucide="play-circle" class="w-6 h-6 text-blue-200"></i>
-          <div>
-            <div class="text-sm font-bold">Comprehensive Mock</div>
-            <div class="text-xs text-blue-200 font-normal">All Subjects Exam</div>
+      <!-- Quick Full Mock Button -->
+      <button onclick="startSession('ALL', 50)" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold p-4 rounded-2xl shadow-lg shadow-blue-600/20 flex items-center justify-between transition">
+        <div class="flex items-center gap-3">
+          <i data-lucide="zap" class="w-6 h-6 text-yellow-300"></i>
+          <div class="text-left">
+            <div class="text-base">Start Random 50 Mock Exam</div>
+            <div class="text-xs text-blue-200 font-normal">Draws 50 random questions across all subjects</div>
           </div>
-        </button>
-        <button onclick="startWeakDrill()" class="bg-rose-900/40 hover:bg-rose-900/60 border border-rose-500/40 text-left p-4 rounded-xl shadow flex flex-col justify-between h-28">
-          <i data-lucide="alert-triangle" class="w-6 h-6 text-rose-400"></i>
-          <div>
-            <div class="text-sm font-bold text-rose-200">Focus Drill</div>
-            <div class="text-xs text-rose-300 font-normal">Retry Missed Questions</div>
-          </div>
-        </button>
-      </div>
+        </div>
+        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+      </button>
 
-      <!-- Subject Performance Breakdown -->
+      <!-- Subject Practice Selection -->
       <div>
-        <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Subject Accuracy</h2>
-        <div id="subject-list" class="space-y-2"></div>
-      </div>
-    </section>
+        <h2 class="text-sm font-bold uppercase text-slate-400 mb-3 tracking-wider">Practice by Subject</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          
+          <button onclick="startSession('Aerodynamics', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">01. Aerodynamics</div>
+              <div class="text-xs text-slate-400">50 Questions • Performance, High-Speed</div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
+          </button>
 
-    <!-- VIEW 2: QUIZ INTERFACE -->
-    <section id="view-quiz" class="hidden space-y-4">
-      <div class="flex justify-between items-center text-xs text-slate-400">
-        <span id="quiz-subject-tag" class="bg-slate-800 px-2.5 py-1 rounded-md text-blue-300 font-medium">Aerodynamics</span>
-        <span id="quiz-progress-text" class="font-bold text-slate-200">Question 1 / 10</span>
-      </div>
+          <button onclick="startSession('Mathematics', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">02. Mathematics</div>
+              <div class="text-xs text-slate-400">50 Questions • Algebra, Calculus, Vectors</div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
+          </button>
 
-      <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-md">
-        <p id="question-text" class="text-base font-semibold text-white leading-relaxed mb-6"></p>
-        <div id="options-container" class="space-y-2.5"></div>
+          <button onclick="startSession('Aircraft Structures and Design', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">03. Structures & Design</div>
+              <div class="text-xs text-slate-400">50 Questions • Load Factors, Beams, FAR 23</div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
+          </button>
 
-        <!-- Explanation Accordion -->
-        <div id="explanation-box" class="hidden mt-5 p-4 rounded-xl bg-slate-900/90 border border-blue-500/30 text-xs leading-relaxed text-slate-300">
-          <div class="font-bold text-blue-400 mb-1 flex items-center gap-1">
-            <i data-lucide="info" class="w-4 h-4"></i> Explanation & Solution:
-          </div>
-          <p id="explanation-text"></p>
+          <button onclick="startSession('Aircraft Construction, Repair and Modification', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">04. ACRM</div>
+              <div class="text-xs text-slate-400">50 Questions • Fasteners, NDT, Weight & Balance</div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
+          </button>
+
+          <button onclick="startSession('Aircraft Powerplant and Thermodynamics', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">05. Powerplant & Thermo</div>
+              <div class="text-xs text-slate-400">50 Questions • Otto/Brayton, Turbines, Propellers</div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
+          </button>
+
+          <button onclick="startSession('Engineering Economics, Laws and Ethics', 50)" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-left hover:border-blue-500 transition group flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-200 group-hover:text-blue-400 transition">06. Laws, Economics & Ethics</div>
+              <div class="text-xs text-slate-400">50 Questions • PD 1570, RA 9497, Annuity</div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
+          </button>
+
         </div>
       </div>
 
-      <div class="flex justify-between items-center pt-2">
-        <button onclick="quitQuiz()" class="text-xs text-slate-400 hover:text-slate-200 px-3 py-2">Quit Test</button>
-        <button id="next-btn" onclick="nextQuestion()" class="hidden bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow">Next</button>
+      <!-- Recent History Logs -->
+      <div>
+        <h2 class="text-sm font-bold uppercase text-slate-400 mb-3 tracking-wider">Recent Activity Logs</h2>
+        <div id="recent-history-list" class="space-y-2">
+          <div class="text-xs text-slate-500 italic p-4 text-center">No quiz history yet. Start your first session above!</div>
+        </div>
       </div>
-    </section>
 
-    <!-- VIEW 3: SESSION RESULTS -->
-    <section id="view-results" class="hidden text-center py-6 space-y-5">
-      <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-lg max-w-sm mx-auto">
-        <div class="w-16 h-16 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-3">
+    </div>
+
+    <!-- VIEW: QUIZ ACTIVE -->
+    <div id="view-quiz" class="hidden space-y-5">
+      
+      <!-- Top Status Header -->
+      <div class="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800">
+        <div>
+          <div id="quiz-subject-title" class="font-bold text-sm text-blue-400">Aerodynamics</div>
+          <div class="text-xs text-slate-400">Question <span id="quiz-current-num">1</span> of <span id="quiz-total-count">50</span></div>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-xl text-slate-300 font-mono text-sm font-semibold">
+          <i data-lucide="clock" class="w-4 h-4 text-blue-400"></i>
+          <span id="quiz-timer">00:00</span>
+        </div>
+      </div>
+
+      <!-- Progress Line -->
+      <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+        <div id="quiz-progress-bar" class="bg-blue-500 h-full w-0 transition-all duration-300"></div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="bg-slate-900 border border-slate-800 p-5 md:p-6 rounded-2xl space-y-4">
+        <span id="question-category" class="text-xs font-semibold uppercase text-blue-400 bg-blue-950/60 px-3 py-1 rounded-lg border border-blue-800/40">Topic</span>
+        <div id="question-text" class="text-base md:text-lg font-medium leading-relaxed text-slate-100">
+          Loading question...
+        </div>
+      </div>
+
+      <!-- Options List -->
+      <div id="options-container" class="space-y-3"></div>
+
+      <!-- Verified Solution & Explanation Box -->
+      <div id="explanation-box" class="hidden bg-slate-900/90 border border-slate-700/60 p-4 rounded-2xl space-y-1">
+        <div id="explanation-text"></div>
+      </div>
+
+      <!-- Footer Action Buttons -->
+      <div class="flex items-center justify-between pt-2">
+        <button id="prev-btn" onclick="prevQuestion()" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-sm disabled:opacity-30 disabled:cursor-not-allowed">
+          Previous
+        </button>
+        <button id="next-btn" onclick="nextQuestion()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/30">
+          Next Question
+        </button>
+      </div>
+
+    </div>
+
+    <!-- VIEW: RESULTS -->
+    <div id="view-results" class="hidden space-y-6 text-center py-6">
+      
+      <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-md mx-auto space-y-5">
+        <div class="w-16 h-16 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center mx-auto">
           <i data-lucide="award" class="w-8 h-8"></i>
         </div>
-        <h2 class="text-xl font-bold text-white mb-1">Session Complete!</h2>
-        <p id="session-summary-text" class="text-xs text-slate-400 mb-4"></p>
-        <div class="text-4xl font-extrabold text-blue-400 mb-2" id="session-score">80%</div>
-        <p class="text-xs text-slate-300" id="session-detail"></p>
+        <div>
+          <h2 class="text-2xl font-black text-slate-100">Session Completed!</h2>
+          <p class="text-xs text-slate-400 mt-1">Your answers and statistics have been saved.</p>
+        </div>
+
+        <div id="res-score-badge" class="text-5xl font-black text-emerald-400">88%</div>
+        <div id="res-score-detail" class="text-sm font-semibold text-slate-300">44 / 50 Correct</div>
+
+        <div class="bg-slate-950 p-4 rounded-2xl flex justify-around text-xs text-slate-400 font-mono">
+          <div>Time Elapsed: <span id="res-time" class="text-slate-200 font-bold">12:30</span></div>
+        </div>
+
+        <div class="pt-4 flex flex-col gap-2">
+          <button onclick="showView('dashboard')" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transition">
+            Back to Dashboard
+          </button>
+        </div>
       </div>
-      <button onclick="switchView('dashboard')" class="bg-blue-600 text-white font-bold text-xs px-6 py-3 rounded-xl shadow">Back to Dashboard</button>
-    </section>
+
+    </div>
 
   </main>
 
-  <!-- Bottom App Tab Bar -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-slate-800/95 backdrop-blur border-t border-slate-700 z-40">
-    <div class="max-w-2xl mx-auto flex justify-around py-2">
-      <button onclick="switchView('dashboard')" class="flex flex-col items-center text-blue-400 text-[10px] font-medium">
-        <i data-lucide="layout-dashboard" class="w-5 h-5 mb-0.5"></i> Dashboard
-      </button>
-      <button onclick="startQuickQuiz('all')" class="flex flex-col items-center text-slate-400 hover:text-slate-200 text-[10px] font-medium">
-        <i data-lucide="file-question" class="w-5 h-5 mb-0.5"></i> Mock Test
-      </button>
-      <button onclick="clearHistoryConfirm()" class="flex flex-col items-center text-slate-400 hover:text-rose-400 text-[10px] font-medium">
-        <i data-lucide="rotate-ccw" class="w-5 h-5 mb-0.5"></i> Reset Stats
-      </button>
-    </div>
-  </nav>
-
   <script src="./app.js"></script>
-  <script>lucide.createIcons();</script>
 </body>
 </html>

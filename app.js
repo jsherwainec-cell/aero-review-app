@@ -1,239 +1,250 @@
+// Register Service Worker for offline PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(console.error);
+}
+
 let allQuestions = [];
 let activeQuizQuestions = [];
-let currentIndex = 0;
-let currentScore = 0;
-let answered = false;
+let currentQuestionIndex = 0;
+let userAnswers = {}; // { questionId: selectedOptionLetter }
+let quizTimerInterval = null;
+let secondsElapsed = 0;
+let instantFeedbackMode = true;
 
-// Local Storage Keys
-const STATS_KEY = 'aero_pwa_stats';
+// DOM Elements
+const views = {
+  dashboard: document.getElementById('view-dashboard'),
+  setup: document.getElementById('view-setup'),
+  quiz: document.getElementById('view-quiz'),
+  results: document.getElementById('view-results')
+};
 
-function getStats() {
-  const data = localStorage.getItem(STATS_KEY);
-  return data ? JSON.parse(data) : { total: 0, correct: 0, byQuestion: {} };
-}
-
-function saveStats(stats) {
-  localStorage.setItem(STATS_KEY, JSON.stringify(stats));
-}
-
-// Load Questions from JSON
-async function initApp() {
+// Initialize App
+async function init() {
   try {
     const res = await fetch('./questions.json');
     allQuestions = await res.json();
-    updateDashboard();
-  } catch (e) {
-    console.error('Failed to load questions.json', e);
+    updateStatsDashboard();
+    lucide.createIcons();
+  } catch (err) {
+    console.error("Could not load question bank:", err);
   }
 }
 
-// Render Dashboard
-function updateDashboard() {
-  const stats = getStats();
-  const total = stats.total || 0;
-  const correct = stats.correct || 0;
-  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+// Fisher-Yates Random Shuffle
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
-  document.getElementById('overall-pct').innerText = `${pct}%`;
-  document.getElementById('overall-progress').style.width = `${pct}%`;
-  document.getElementById('stat-total-answered').innerText = total;
-  document.getElementById('stat-correct-count').innerText = correct;
-
-  // Focus list count (questions answered incorrectly)
-  const missedCount = Object.values(stats.byQuestion || {}).filter(q => q.wrong > q.correct).length;
-  document.getElementById('stat-wrong-count').innerText = missedCount;
-
-  // Group by Subject
-  const subjects = [...new Set(allQuestions.map(q => q.subject))];
-  const listEl = document.getElementById('subject-list');
-  listEl.innerHTML = '';
-
-  subjects.forEach(sub => {
-    const subQuestions = allQuestions.filter(q => q.subject === sub);
-    let subTotal = 0;
-    let subCorrect = 0;
-
-    subQuestions.forEach(q => {
-      const qStat = stats.byQuestion[q.id];
-      if (qStat) {
-        subTotal += (qStat.correct + qStat.wrong);
-        subCorrect += qStat.correct;
-      }
-    });
-
-    const subPct = subTotal > 0 ? Math.round((subCorrect / subTotal) * 100) : 0;
-
-    const row = document.createElement('div');
-    row.className = 'bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/80 flex items-center justify-between cursor-pointer hover:border-blue-500/50 transition';
-    row.onclick = () => startQuickQuiz(sub);
-    row.innerHTML = `
-      <div class="flex-1 mr-4">
-        <div class="flex justify-between items-center mb-1 text-xs">
-          <span class="font-semibold text-slate-200">${sub}</span>
-          <span class="text-slate-400 font-mono">${subPct}%</span>
-        </div>
-        <div class="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
-          <div class="bg-blue-500 h-full rounded-full" style="width: ${subPct}%"></div>
-        </div>
-      </div>
-      <button class="text-xs bg-slate-700/60 hover:bg-blue-600 text-slate-200 px-3 py-1.5 rounded-lg font-medium">Practice</button>
-    `;
-    listEl.appendChild(row);
-  });
-
+function showView(viewName) {
+  Object.keys(views).forEach(v => views[v].classList.add('hidden'));
+  views[viewName].classList.remove('hidden');
+  window.scrollTo(0, 0);
   lucide.createIcons();
 }
 
-// Start Quiz by Subject
-function startQuickQuiz(subject) {
-  if (subject === 'all') {
-    activeQuizQuestions = [...allQuestions].sort(() => 0.5 - Math.random());
-  } else {
-    activeQuizQuestions = allQuestions.filter(q => q.subject === subject).sort(() => 0.5 - Math.random());
-  }
-  if (activeQuizQuestions.length === 0) return alert('No questions available in this category.');
-  
-  currentIndex = 0;
-  currentScore = 0;
-  switchView('quiz');
-  renderQuestion();
-}
+// Start a 50-Question Randomized Session
+function startSession(subjectFilter = 'ALL', count = 50, weakOnly = false) {
+  let pool = allQuestions;
 
-// Start Weak Spot Drill
-function startWeakDrill() {
-  const stats = getStats();
-  const weakQuestions = allQuestions.filter(q => {
-    const s = stats.byQuestion[q.id];
-    return s && s.wrong > s.correct;
-  });
-
-  if (weakQuestions.length === 0) {
-    alert('Great job! No weak questions logged yet. Take a regular mock test first.');
-    return;
+  if (subjectFilter !== 'ALL') {
+    pool = pool.filter(q => q.subject === subjectFilter);
   }
 
-  activeQuizQuestions = weakQuestions.sort(() => 0.5 - Math.random());
-  currentIndex = 0;
-  currentScore = 0;
-  switchView('quiz');
+  if (weakOnly) {
+    const wrongIds = getWrongQuestionsList();
+    pool = pool.filter(q => wrongIds.includes(q.id));
+    if (pool.length === 0) {
+      alert("No recorded weak questions for this subject yet! Practice a standard session first.");
+      return;
+    }
+  }
+
+  // Randomize pool and slice to requested count (default 50)
+  const randomized = shuffleArray(pool);
+  activeQuizQuestions = randomized.slice(0, Math.min(count, randomized.length));
+
+  currentQuestionIndex = 0;
+  userAnswers = {};
+  secondsElapsed = 0;
+
+  document.getElementById('quiz-subject-title').innerText = subjectFilter === 'ALL' ? 'Full Mock Board Exam' : subjectFilter;
+  document.getElementById('quiz-total-count').innerText = activeQuizQuestions.length;
+
+  startTimer();
   renderQuestion();
+  showView('quiz');
 }
 
-// Render Single Question
+function startTimer() {
+  clearInterval(quizTimerInterval);
+  const timerEl = document.getElementById('quiz-timer');
+  quizTimerInterval = setInterval(() => {
+    secondsElapsed++;
+    const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+    const secs = String(secondsElapsed % 60).padStart(2, '0');
+    timerEl.innerText = `${mins}:${secs}`;
+  }, 1000);
+}
+
 function renderQuestion() {
-  answered = false;
-  const q = activeQuizQuestions[currentIndex];
-  document.getElementById('quiz-subject-tag').innerText = q.subject;
-  document.getElementById('quiz-progress-text').innerText = `Question ${currentIndex + 1} / ${activeQuizQuestions.length}`;
+  const q = activeQuizQuestions[currentQuestionIndex];
+  document.getElementById('quiz-current-num').innerText = currentQuestionIndex + 1;
+  document.getElementById('quiz-progress-bar').style.width = `${((currentQuestionIndex + 1) / activeQuizQuestions.length) * 100}%`;
+  
+  document.getElementById('question-category').innerText = `${q.subject} • ${q.topic || 'General'}`;
   document.getElementById('question-text').innerText = q.question;
-  document.getElementById('explanation-box').classList.add('hidden');
-  document.getElementById('next-btn').classList.add('hidden');
 
-  const container = document.getElementById('options-container');
-  container.innerHTML = '';
+  const optionsContainer = document.getElementById('options-container');
+  optionsContainer.innerHTML = '';
+
+  const selectedAnswer = userAnswers[q.id];
 
   q.options.forEach(opt => {
-    const optLetter = opt.trim().charAt(0).toLowerCase();
+    const letter = opt.trim().charAt(0);
     const btn = document.createElement('button');
-    btn.className = 'w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/90 hover:bg-slate-700/60 text-xs font-medium text-slate-200 transition';
-    btn.innerText = opt;
-    btn.onclick = () => selectOption(optLetter, btn);
-    container.appendChild(btn);
+    btn.className = "w-full text-left p-4 rounded-xl border border-slate-700 bg-slate-800/80 hover:border-blue-500 transition duration-150 flex items-start gap-3 text-slate-200";
+
+    if (selectedAnswer) {
+      if (letter === q.correct_answer) {
+        btn.className += " border-emerald-500 bg-emerald-950/40 text-emerald-300 font-semibold";
+      } else if (selectedAnswer === letter) {
+        btn.className += " border-rose-500 bg-rose-950/40 text-rose-300 font-semibold";
+      } else {
+        btn.className += " opacity-40";
+      }
+    }
+
+    btn.innerHTML = `<span class="px-2.5 py-1 rounded-lg bg-slate-700 text-xs font-bold">${letter}</span> <span class="flex-1 text-sm md:text-base">${opt.substring(2).trim()}</span>`;
+    
+    btn.onclick = () => selectOption(q.id, letter);
+    optionsContainer.appendChild(btn);
   });
+
+  // Explanation Box
+  const expBox = document.getElementById('explanation-box');
+  if (selectedAnswer && instantFeedbackMode) {
+    expBox.classList.remove('hidden');
+    document.getElementById('explanation-text').innerHTML = `
+      <div class="font-bold text-sm mb-1 ${selectedAnswer === q.correct_answer ? 'text-emerald-400' : 'text-rose-400'}">
+        ${selectedAnswer === q.correct_answer ? '✓ Correct Answer (' + q.correct_answer + ')' : '✗ Incorrect (Correct: ' + q.correct_answer + ')'}
+      </div>
+      <p class="text-xs md:text-sm text-slate-300">${q.explanation || 'Refer to standard AELE board review reference.'}</p>
+    `;
+  } else {
+    expBox.classList.add('hidden');
+  }
+
+  // Update Nav Buttons
+  document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+  document.getElementById('next-btn').innerText = currentQuestionIndex === activeQuizQuestions.length - 1 ? 'Finish Exam' : 'Next Question';
 }
 
-// Handle Answer Selection
-function selectOption(selectedLetter, btnElement) {
-  if (answered) return;
-  answered = true;
-
-  const q = activeQuizQuestions[currentIndex];
-  const isCorrect = (selectedLetter === q.correct_answer.toLowerCase());
-  const stats = getStats();
-
-  if (!stats.byQuestion[q.id]) {
-    stats.byQuestion[q.id] = { correct: 0, wrong: 0 };
-  }
-
-  stats.total += 1;
-  if (isCorrect) {
-    currentScore += 1;
-    stats.correct += 1;
-    stats.byQuestion[q.id].correct += 1;
-    btnElement.classList.add('bg-emerald-600', 'border-emerald-400', 'text-white');
-  } else {
-    stats.byQuestion[q.id].wrong += 1;
-    btnElement.classList.add('bg-rose-600', 'border-rose-400', 'text-white');
-    
-    // Highlight correct answer
-    const container = document.getElementById('options-container');
-    Array.from(container.children).forEach(child => {
-      if (child.innerText.trim().charAt(0).toLowerCase() === q.correct_answer.toLowerCase()) {
-        child.classList.add('bg-emerald-600/60', 'border-emerald-400', 'text-white');
-      }
-    });
-  }
-
-  saveStats(stats);
-
-  if (q.explanation) {
-    document.getElementById('explanation-text').innerText = q.explanation;
-    document.getElementById('explanation-box').classList.remove('hidden');
-  }
-
-  document.getElementById('next-btn').classList.remove('hidden');
-  lucide.createIcons();
+function selectOption(qId, letter) {
+  if (userAnswers[qId]) return; // prevent multiple clicks
+  userAnswers[qId] = letter;
+  renderQuestion();
 }
 
 function nextQuestion() {
-  if (currentIndex + 1 < activeQuizQuestions.length) {
-    currentIndex += 1;
+  if (currentQuestionIndex < activeQuizQuestions.length - 1) {
+    currentQuestionIndex++;
     renderQuestion();
   } else {
     finishQuiz();
   }
 }
 
+function prevQuestion() {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    renderQuestion();
+  }
+}
+
+// Calculate & Save Stats
 function finishQuiz() {
-  const pct = Math.round((currentScore / activeQuizQuestions.length) * 100);
-  document.getElementById('session-score').innerText = `${pct}%`;
-  document.getElementById('session-detail').innerText = `You scored ${currentScore} out of ${activeQuizQuestions.length} questions correctly.`;
-  document.getElementById('session-summary-text').innerText = pct >= 75 ? 'Passed — Above PRC board benchmark.' : 'Needs review — Keep practicing weak areas.';
-  switchView('results');
+  clearInterval(quizTimerInterval);
+  let correctCount = 0;
+  const wrongIds = [];
+
+  activeQuizQuestions.forEach(q => {
+    if (userAnswers[q.id] === q.correct_answer) {
+      correctCount++;
+    } else {
+      wrongIds.push(q.id);
+    }
+  });
+
+  const scorePercent = Math.round((correctCount / activeQuizQuestions.length) * 100);
+
+  // Save session to LocalStorage
+  const sessionData = {
+    date: new Date().toISOString(),
+    subject: document.getElementById('quiz-subject-title').innerText,
+    total: activeQuizQuestions.length,
+    score: correctCount,
+    percent: scorePercent,
+    durationSeconds: secondsElapsed,
+    wrongQuestions: wrongIds
+  };
+
+  saveSessionLog(sessionData);
+
+  // Display Results
+  document.getElementById('res-score-badge').innerText = `${scorePercent}%`;
+  document.getElementById('res-score-detail').innerText = `${correctCount} / ${activeQuizQuestions.length} Correct`;
+  document.getElementById('res-time').innerText = document.getElementById('quiz-timer').innerText;
+
+  updateStatsDashboard();
+  showView('results');
 }
 
-function quitQuiz() {
-  if (confirm('Are you sure you want to quit this session?')) {
-    switchView('dashboard');
-    updateDashboard();
+function saveSessionLog(session) {
+  const history = JSON.parse(localStorage.getItem('aele_history') || '[]');
+  history.unshift(session);
+  localStorage.setItem('aele_history', JSON.stringify(history.slice(0, 50))); // keep last 50
+}
+
+function getWrongQuestionsList() {
+  const history = JSON.parse(localStorage.getItem('aele_history') || '[]');
+  const wrongSet = new Set();
+  history.forEach(h => (h.wrongQuestions || []).forEach(id => wrongSet.add(id)));
+  return Array.from(wrongSet);
+}
+
+function updateStatsDashboard() {
+  const history = JSON.parse(localStorage.getItem('aele_history') || '[]');
+  document.getElementById('stat-total-sessions').innerText = history.length;
+  
+  if (history.length === 0) {
+    document.getElementById('stat-avg-score').innerText = '0%';
+    return;
+  }
+
+  const avg = Math.round(history.reduce((acc, cur) => acc + cur.percent, 0) / history.length);
+  document.getElementById('stat-avg-score').innerText = `${avg}%`;
+
+  // History List
+  const histContainer = document.getElementById('recent-history-list');
+  if (histContainer) {
+    histContainer.innerHTML = history.slice(0, 5).map(h => `
+      <div class="flex items-center justify-between p-3 bg-slate-800/60 rounded-xl border border-slate-700/50">
+        <div>
+          <div class="font-semibold text-sm text-slate-200">${h.subject}</div>
+          <div class="text-xs text-slate-400">${new Date(h.date).toLocaleDateString()} • ${h.total} Questions</div>
+        </div>
+        <div class="text-right">
+          <span class="font-bold text-sm ${h.percent >= 75 ? 'text-emerald-400' : 'text-amber-400'}">${h.percent}%</span>
+        </div>
+      </div>
+    `).join('');
   }
 }
 
-function switchView(viewName) {
-  document.getElementById('view-dashboard').classList.add('hidden');
-  document.getElementById('view-quiz').classList.add('hidden');
-  document.getElementById('view-results').classList.add('hidden');
-
-  if (viewName === 'dashboard') {
-    document.getElementById('view-dashboard').classList.remove('hidden');
-    updateDashboard();
-  } else if (viewName === 'quiz') {
-    document.getElementById('view-quiz').classList.remove('hidden');
-  } else if (viewName === 'results') {
-    document.getElementById('view-results').classList.remove('hidden');
-  }
-}
-
-function clearHistoryConfirm() {
-  if (confirm('Reset all test history and mastery statistics?')) {
-    localStorage.removeItem(STATS_KEY);
-    updateDashboard();
-  }
-}
-
-// Service Worker Registration
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed', err));
-}
-
-window.onload = initApp;
+window.onload = init;

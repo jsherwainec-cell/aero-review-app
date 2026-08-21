@@ -1,146 +1,208 @@
 [
   {
-    "id": "aero_001",
+    "id": "AERO-01",
     "subject": "Aerodynamics",
-    "topic": "Aircraft Performance & Drag",
-    "question": "At an airplane's minimum drag speed, the ratio between induced drag and profile drag (Di/Dp) is:",
-    "options": ["a. 1", "b. 1/3", "c. 1/2", "d. 3"],
-    "correct_answer": "a",
-    "explanation": "At minimum drag speed (L/D max), parasite/profile drag is equal to induced drag (Dp = Di). Therefore, the ratio Di / Dp = 1."
+    "topic": "Aircraft Performance",
+    "question": "At an airplane’s minimum drag speed, what is the ratio between induced drag and profile drag (Di/Dp)?",
+    "options": ["A. 1", "B. 1/3", "C. 1/2", "D. 3"],
+    "correct_answer": "A",
+    "explanation": "At minimum drag speed (L/D max), induced drag equals profile (parasite) drag, meaning Di / Dp = 1."
   },
   {
-    "id": "aero_002",
+    "id": "AERO-02",
     "subject": "Aerodynamics",
-    "topic": "Aircraft Classification",
-    "question": "Which of the following is a glider?",
-    "options": ["a. Zenith S-5", "b. Zeppelin", "c. F/A – 18", "d. DG 1001"],
-    "correct_answer": "d",
-    "explanation": "The DG Flugzeugbau DG-1001 is a modern two-seat sailplane/glider."
+    "topic": "Basic Aerodynamics",
+    "question": "An aircraft with a gross weight of 2,000 lbs is subjected to a 60-degree constant-altitude coordinated bank. What is the total lift load on the aircraft?",
+    "options": ["A. 1,500 lbs", "B. 4,000 lbs", "C. 1,862 lbs", "D. 2,820 lbs"],
+    "correct_answer": "B",
+    "explanation": "Load factor n = 1 / cos(60°) = 2.0. Total Load = 2,000 lbs × 2.0 = 4,000 lbs."
   },
   {
-    "id": "aero_003",
+    "id": "AERO-03",
     "subject": "Aerodynamics",
-    "topic": "Maneuvering Flight & Load Factors",
-    "question": "An aircraft with a gross weight of 2,000 pounds was subjected to a 60-degree constant altitude bank. What is the total load on the aircraft?",
-    "options": ["a. 1,500 lbs.", "b. 4,000 lbs.", "c. 1,862 lbs.", "d. 2,820 lbs."],
-    "correct_answer": "b",
-    "explanation": "In a coordinated level turn, load factor n = 1 / cos(60°) = 2.0 g. Total load = 2,000 lbs × 2.0 = 4,000 lbs."
+    "topic": "High-Speed Aerodynamics",
+    "question": "Across an oblique shock wave, which of the following component relationships is correct?",
+    "options": [
+      "A. Tangential component of velocity in front of and behind the wave are equal.",
+      "B. Tangential component of velocity in front is greater than behind.",
+      "C. Tangential component of velocity behind is greater than in front.",
+      "D. Normal component of velocity behind is greater than in front."
+    ],
+    "correct_answer": "A",
+    "explanation": "Across an oblique shock wave, only the normal component of velocity decreases; the tangential component remains constant."
   },
   {
-    "id": "aero_004",
+    "id": "AERO-04",
     "subject": "Aerodynamics",
-    "topic": "High Speed Aerodynamics",
-    "question": "Which of the following drag components is NOT present on a subsonic wing?",
-    "options": ["a. Induced Drag", "b. Wave Drag", "c. Parasite Drag", "d. Interference Drag"],
-    "correct_answer": "b",
-    "explanation": "Wave drag only occurs when flow velocity exceeds sonic speeds and forms shock waves. It is absent in subsonic flow."
+    "topic": "Stability and Control",
+    "question": "What is the primary consequence of having excessive lateral stability (e.g., too much wing dihedral)?",
+    "options": [
+      "A. During crosswind landing, control is extremely difficult and Dutch roll tendencies increase.",
+      "B. During tailwind landing, directional control is lost.",
+      "C. Sideslip is completely eliminated.",
+      "D. Parasite drag is substantially reduced."
+    ],
+    "correct_answer": "A",
+    "explanation": "Excessive dihedral/lateral stability makes crosswind landings difficult due to strong rolling moments into the wind, and predisposes the aircraft to Dutch roll."
   },
   {
-    "id": "aero_005",
-    "subject": "Aerodynamics",
-    "topic": "Wing Geometry & Aspect Ratio",
-    "question": "A higher induced angle of attack can be obtained by using:",
-    "options": ["a. lower taper ratio", "b. larger wing area", "c. higher wing aspect ratio", "d. lower wing aspect ratio"],
-    "correct_answer": "d",
-    "explanation": "Induced angle of attack is αi = CL / (π · AR · e). A lower aspect ratio (AR) increases induced angle of attack and induced drag."
-  },
-  {
-    "id": "math_001",
+    "id": "MATH-01",
     "subject": "Mathematics",
-    "topic": "Algebra & Quadratic Equations",
-    "question": "The discriminant of the standard quadratic equation Ax² + Bx + C = 0 is:",
-    "options": ["a. B² − 4AC", "b. B² + 4AC", "c. -B ± √(B² - 4AC)", "d. 4AC - B²"],
-    "correct_answer": "a",
-    "explanation": "In Ax² + Bx + C = 0, the discriminant D = B² − 4AC determines root characteristics."
+    "topic": "Algebra & Progressions",
+    "question": "For an arithmetic progression where the first term is 10, the last term is 40, and the sum of the terms is 250, how many terms (n) are in the progression?",
+    "options": ["A. 8", "B. 10", "C. 12", "D. 15"],
+    "correct_answer": "B",
+    "explanation": "Sn = (n/2)(a1 + an) => 250 = (n/2)(10 + 40) => 250 = 25n => n = 10."
   },
   {
-    "id": "math_002",
+    "id": "MATH-02",
     "subject": "Mathematics",
-    "topic": "Logarithms",
-    "question": "Solve for x in the logarithmic equation: log_x(1024) = 5/2",
-    "options": ["a. 8", "b. 4", "c. 16", "d. 32"],
-    "correct_answer": "c",
-    "explanation": "x^(5/2) = 1024 = 2^10. Taking the power of 2/5 on both sides: x = 2^4 = 16."
+    "topic": "Calculus",
+    "question": "Evaluate the limit of (x^2 + 4x - 5) / (x^2 - 4x + 3) as x approaches 1.",
+    "options": ["A. 3", "B. -1", "C. 6", "D. -3"],
+    "correct_answer": "D",
+    "explanation": "Factoring: [(x + 5)(x - 1)] / [(x - 3)(x - 1)] = (x + 5)/(x - 3). At x = 1: (1 + 5)/(1 - 3) = 6 / (-2) = -3."
   },
   {
-    "id": "math_003",
+    "id": "MATH-03",
     "subject": "Mathematics",
-    "topic": "Differential Calculus",
-    "question": "Find the first derivative f'(x) for f(x) = 6x³ − 9x + 4:",
-    "options": ["a. 18x² + 9", "b. 18x - 9", "c. 6x² - 9", "d. 18x² − 9"],
-    "correct_answer": "d",
-    "explanation": "d/dx(6x³ - 9x + 4) = 18x² - 9."
+    "topic": "Trigonometry & Navigation",
+    "question": "Two aircraft depart the same airport at the same time. Plane A flies on a bearing of N20°E at 30 mph, and Plane B flies on S50°E at 20 mph. Find the straight-line distance between them after 3 hours.",
+    "options": ["A. 124 miles", "B. 110 miles", "C. 145 miles", "D. 95 miles"],
+    "correct_answer": "A",
+    "explanation": "Leg A = 90 mi, Leg B = 60 mi. Angle between N20°E (020°) and S50°E (130°) = 110°. By Law of Cosines: d = sqrt(90^2 + 60^2 - 2*90*60*cos(110°)) = 124.1 miles."
   },
   {
-    "id": "struct_001",
+    "id": "STRUC-01",
     "subject": "Aircraft Structures and Design",
-    "topic": "Aircraft Structural Components",
-    "question": "A wing structural design that utilizes the sealed internal wing cavity for fuel storage is known as a:",
-    "options": ["a. dry wing design", "b. fuel wing design", "c. wet wing design", "d. central fuel storage"],
-    "correct_answer": "c",
-    "explanation": "A wet wing (integral tank) seals the interior wing structure directly to hold fuel without fuel bladder bags."
+    "topic": "Design Fundamentals",
+    "question": "A structural design that incorporates multiple load paths and redundancy so that the failure of a single member does not lead to catastrophic collapse is known as:",
+    "options": ["A. Safe-life design", "B. Fail-safe design", "C. Infinite-life design", "D. Monocoque design"],
+    "correct_answer": "B",
+    "explanation": "Fail-safe design provides backup load paths and containment features to ensure safety in the event of partial structural failure."
   },
   {
-    "id": "struct_002",
+    "id": "STRUC-02",
     "subject": "Aircraft Structures and Design",
-    "topic": "Structural Design Philosophy",
-    "question": "Structural designs that incorporate multiple load paths to prevent catastrophic failure in the event of a single member failure are termed:",
-    "options": ["a. fail safe design", "b. fail proof design", "c. safe life design", "d. reliable design"],
-    "correct_answer": "a",
-    "explanation": "Fail-safe structural design incorporates redundant load paths to sustain flight loads if a member fails."
+    "topic": "Mechanics of Materials",
+    "question": "What force is required to punch a 20 mm diameter hole in an aluminum plate that is 25 mm thick if the material shear strength is 350 MPa?",
+    "options": ["A. 345 kN", "B. 550 kN", "C. 221 kN", "D. 566 kN"],
+    "correct_answer": "B",
+    "explanation": "Shear Area A = π * d * t = π * (0.020 m) * (0.025 m) = 0.0015708 m². Force F = τ * A = (350 * 10^6 N/m²) * 0.0015708 m² = 549,778 N ≈ 550 kN."
   },
   {
-    "id": "acrm_001",
+    "id": "STRUC-03",
+    "subject": "Aircraft Structures and Design",
+    "topic": "Wing Geometry",
+    "question": "In biplane design, what is the term for the longitudinal offset of the top wing relative to the bottom wing?",
+    "options": ["A. Decalage", "B. Gap", "C. Stagger", "D. Washout"],
+    "correct_answer": "C",
+    "explanation": "Stagger is the longitudinal offset of the wings. Decalage is the difference in the angle of incidence between the two wings."
+  },
+  {
+    "id": "ACRM-01",
     "subject": "Aircraft Construction, Repair and Modification",
-    "topic": "Heat Treatment of Metals",
-    "question": "Normalizing is an industrial heat-treating process used exclusively for:",
-    "options": ["a. non-ferrous metals aside from aluminum", "b. aluminum alloys only", "c. ferrous metals only", "d. both ferrous and non-ferrous metals"],
-    "correct_answer": "c",
-    "explanation": "Normalizing is performed exclusively on iron and steel (ferrous) alloys to refine grain structure and relieve internal stress."
+    "topic": "Hardware & Fasteners",
+    "question": "In the standard military rivet code MS20430AD8-6, what are the diameter and length of the rivet?",
+    "options": [
+      "A. 1/4 inch diameter and 3/8 inch length",
+      "B. 3/8 inch diameter and 1/4 inch length",
+      "C. 8/32 inch diameter and 6/16 inch length",
+      "D. 1/2 inch diameter and 3/16 inch length"
+    ],
+    "correct_answer": "A",
+    "explanation": "In rivet coding: 8 represents shank diameter in 32nds (8/32\" = 1/4\"), and 6 represents length in 16ths (6/16\" = 3/8\")."
   },
   {
-    "id": "acrm_002",
+    "id": "ACRM-02",
     "subject": "Aircraft Construction, Repair and Modification",
-    "topic": "Aircraft Fasteners & Riveting",
-    "question": "According to standard aviation sheet metal repair standards, the driven shop head (bucktail) of a solid rivet must have a diameter of:",
-    "options": ["a. 1.5 times the shank diameter", "b. 0.5 times the shank diameter", "c. 2.0 times the sheet thickness", "d. 3.0 times the manufactured head"],
-    "correct_answer": "a",
-    "explanation": "Per AC 43.13-1B, a driven rivet bucktail diameter should be 1.5D and height should be 0.5D."
+    "topic": "Heat Treatment & Metallurgy",
+    "question": "Why is steel tempered immediately after being hardened by quenching?",
+    "options": [
+      "A. To increase hardness and reduce ductility",
+      "B. To relieve internal stresses and reduce extreme brittleness",
+      "C. To raise its annealing point",
+      "D. To case-harden the outer surface"
+    ],
+    "correct_answer": "B",
+    "explanation": "Quenching leaves steel hard but dangerously brittle with high internal stresses; tempering relieves stresses and restores necessary toughness."
   },
   {
-    "id": "pwr_001",
+    "id": "ACRM-03",
+    "subject": "Aircraft Construction, Repair and Modification",
+    "topic": "Non-Destructive Testing",
+    "question": "The ferromagnetic particles used in Magnetic Particle Inspection (MPI) must possess which magnetic characteristics?",
+    "options": [
+      "A. High permeability and high retentivity",
+      "B. Low permeability and low retentivity",
+      "C. High permeability and low retentivity",
+      "D. Low permeability and high retentivity"
+    ],
+    "correct_answer": "C",
+    "explanation": "High permeability allows easy magnetization to attract to defect leakage fields, while low retentivity prevents residual magnetism from causing false indications."
+  },
+  {
+    "id": "PWR-01",
     "subject": "Aircraft Powerplant and Thermodynamics",
-    "topic": "Reciprocating Engine Principles",
-    "question": "How many complete revolutions of the crankshaft are required to complete all four strokes in a four-stroke engine?",
-    "options": ["a. 6", "b. 4", "c. 2", "d. 8"],
-    "correct_answer": "c",
-    "explanation": "Four strokes (4 × 180° = 720°) require exactly 2 full crankshaft revolutions."
+    "topic": "Thermodynamic Cycles",
+    "question": "For an ideal air-standard Diesel cycle with a compression ratio (rk) of 18 and a cutoff ratio (rc) of 2, what is the thermal efficiency (with k = 1.4)?",
+    "options": ["A. 51.2%", "B. 63.2%", "C. 70.5%", "D. 48.0%"],
+    "correct_answer": "B",
+    "explanation": "η = 1 - [1 / rk^(k-1)] * [(rc^k - 1) / (k * (rc - 1))]. Substituting rk=18, rc=2, k=1.4 yields η = 0.6316 ≈ 63.2%."
   },
   {
-    "id": "pwr_002",
+    "id": "PWR-02",
     "subject": "Aircraft Powerplant and Thermodynamics",
-    "topic": "Gas Turbine Engine Systems",
-    "question": "The highest internal gas static pressure within a gas turbine engine occurs:",
-    "options": ["a. Between the compressor outlet and the combustion chamber", "b. In the center of the combustion chamber", "c. Across the high-pressure turbine nozzle", "d. In the propelling exhaust nozzle"],
-    "correct_answer": "a",
-    "explanation": "Static pressure reaches its peak at the compressor diffuser outlet before entering the combustion chamber."
+    "topic": "Internal Combustion Engines",
+    "question": "How many degrees of crankshaft rotation are required to complete a full 4-stroke operating cycle in a 6-cylinder engine?",
+    "options": ["A. 180°", "B. 360°", "C. 720°", "D. 1080°"],
+    "correct_answer": "C",
+    "explanation": "All four-stroke engines require exactly 2 complete crankshaft revolutions (720°) to complete the full 4 strokes (Induction, Compression, Power, Exhaust), regardless of cylinder count."
   },
   {
-    "id": "law_001",
-    "subject": "Engineering Economics, Laws and Ethics",
-    "topic": "Philippine Aviation Law (P.D. 1570)",
-    "question": "Presidential Decree No. 1570, regulating the practice of Aeronautical Engineering in the Philippines, was signed on:",
-    "options": ["a. June 11, 1968", "b. June 11, 1973", "c. June 11, 1976", "d. June 11, 1978"],
-    "correct_answer": "d",
-    "explanation": "P.D. No. 1570 was enacted on June 11, 1978."
+    "id": "PWR-03",
+    "subject": "Aircraft Powerplant and Thermodynamics",
+    "topic": "Induction & Turbocharging",
+    "question": "What is the primary function of the waste gate in a turbo-supercharged aircraft engine system?",
+    "options": [
+      "A. Regulate fuel flow to the injectors",
+      "B. Regulate the amount of exhaust gas directed across the turbine",
+      "C. Prevent carburetor icing",
+      "D. Maintain positive crankcase breathing"
+    ],
+    "correct_answer": "B",
+    "explanation": "The waste gate controls turbocharger speed and boost pressure by bypassing excess exhaust gas around the turbine wheel."
   },
   {
-    "id": "law_002",
+    "id": "LAW-01",
     "subject": "Engineering Economics, Laws and Ethics",
-    "topic": "Aviation Communications & Regulations",
-    "question": "What is the secondary surveillance radar (SSR) transponder code for two-way radio communication failure?",
-    "options": ["a. 2200", "b. 7500", "c. 7600", "d. 7700"],
-    "correct_answer": "c",
-    "explanation": "Squawk 7600 indicates loss of two-way radio communications (NORDO)."
+    "topic": "Philippine Aviation Law",
+    "question": "Under Presidential Decree No. 1570 (Aeronautical Engineering Law), what is the maximum term of office for members of the Board of Aeronautical Engineering?",
+    "options": ["A. 2 years", "B. 3 years", "C. 5 years", "D. 6 years"],
+    "correct_answer": "B",
+    "explanation": "Under PD 1570 Section 6, the members of the Board shall hold office for a term of three (3) years."
+  },
+  {
+    "id": "LAW-02",
+    "subject": "Engineering Economics, Laws and Ethics",
+    "topic": "Engineering Economics",
+    "question": "At an annual compound interest rate of 8%, what is the future worth of ₱1,000.00 at the end of 4 years?",
+    "options": ["A. ₱1,360.49", "B. ₱1,288.90", "C. ₱1,412.20", "D. ₱1,320.00"],
+    "correct_answer": "A",
+    "explanation": "F = P(1 + i)^n = ₱1,000 * (1 + 0.08)^4 = ₱1,000 * 1.3604889 = ₱1,360.49."
+  },
+  {
+    "id": "LAW-03",
+    "subject": "Engineering Economics, Laws and Ethics",
+    "topic": "Code of Professional Ethics",
+    "question": "According to the Code of Ethics for Aeronautical Engineers, in which relationship is an engineer required to act as a faithful agent or trustee and maintain strict confidentiality of business affairs and technical processes?",
+    "options": [
+      "A. Relations with the State",
+      "B. Relations with the Profession",
+      "C. Relations with Clients and Employers",
+      "D. Relations with the Public"
+    ],
+    "correct_answer": "C",
+    "explanation": "Acting as a faithful trustee and safeguarding client proprietary data is explicitly governed under 'Relations with Clients and Employers'."
   }
 ]

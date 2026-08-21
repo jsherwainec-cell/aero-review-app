@@ -1,6 +1,7 @@
 {
-  "name": "AeroReview Exam PWA",
-  "short_name": "AeroReview",
+  "name": "AELE Review Master PWA",
+  "short_name": "AELE Quiz",
+  "description": "Aeronautical Engineering Licensure Examination Interactive Quiz & Analytics",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f172a",
@@ -8,13 +9,9 @@
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/3125/3125713.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/3125/3125713.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
